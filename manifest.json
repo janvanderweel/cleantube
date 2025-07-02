@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Cleantube – Youtube Subscriptions Only",
+  "version": "1.0",
+  "description": "Get a hold on your procrastination monkey. Cleantube removes YouTube distractions and redirects you to your subscriptions feed only.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["*://www.youtube.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://www.youtube.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "128": "icon.png"
+  }
+}
