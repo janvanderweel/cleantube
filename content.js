@@ -110,16 +110,31 @@ function hideSearchbarIfEnabled() {
                 document.head.appendChild(style);
             }
             style.textContent = `
-                /* Hide the search input */
-                #search {
-                    display: none !important;
-                }
-                /* Hide the search box container */
+                /* Hide the entire search box container */
                 ytd-searchbox {
                     display: none !important;
                 }
-                /* Alternative selector for search bar */
+                /* Hide search input by class */
+                .ytSearchboxComponentInput,
+                .yt-searchbox-input {
+                    display: none !important;
+                }
+                /* Hide the search box wrapper */
+                #search {
+                    display: none !important;
+                }
+                /* Hide by aria-label */
                 [aria-label="Search"] {
+                    display: none !important;
+                }
+                /* Hide voice search button */
+                button[aria-label*="search"],
+                button[aria-label*="Search"] {
+                    display: none !important;
+                }
+                /* Hide the search icon button */
+                #voice-search-button,
+                button[aria-label="Search with your voice"] {
                     display: none !important;
                 }
             `;
