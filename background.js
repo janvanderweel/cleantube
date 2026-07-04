@@ -3,6 +3,8 @@
 chrome.runtime.onInstalled.addListener(() => {
     // Set initial state: extension is enabled by default
     chrome.storage.sync.set({ extensionEnabled: true });
+    // Set initial state: search bar is visible by default (hideSearchbar is false)
+    chrome.storage.sync.set({ hideSearchbar: false });
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {

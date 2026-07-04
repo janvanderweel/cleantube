@@ -21,6 +21,10 @@ redirectIfEnabled();
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "checkAndRedirect") {
         redirectIfEnabled();
+        hideSidebarIfEnabled();
+        hideSearchbarIfEnabled();
+    } else if (request.action === "updateSearchbarVisibility") {
+        hideSearchbarIfEnabled();
     }
 });
 
@@ -95,14 +99,52 @@ function hideSidebarIfEnabled() {
     });
 }
 
-// Run it on load
-hideSidebarIfEnabled();
+function hideSearchbarIfEnabled() {
+    chrome.storage.sync.get('hideSearchbar', (data) => {
+        const hideSearchbar = data.hideSearchbar === true;
+        if (hideSearchbar) {
+            let style = document.getElementById("hide-searchbar-style");
+            if (!style) {
+                style = document.createElement('style');
+                style.id = "hide-searchbar-style";
+                document.head.appendChild(style);
+            }
+            style.textContent = `
+                /* Hide the search input */
+                #search {
+                    display: none !important;
+                }
+                /* Hide the search box container */
+                ytd-searchbox {
+                    display: none !important;
+                }
+                /* Alternative selector for search bar */
+                [aria-label="Search"] {
+                    display: none !important;
+                }
+            `;
+        } else {
+            const existingStyle = document.getElementById("hide-searchbar-style");
+            if (existingStyle) existingStyle.remove();
+        }
+    });
+}
 
-// Also re-run when toggle changes
+// Run on load
+window.addEventListener('load', () => {
+    hideSidebarIfEnabled();
+    hideSearchbarIfEnabled();
+});
+
+// Also run immediately for faster effect
+hideSidebarIfEnabled();
+hideSearchbarIfEnabled();
+
+// Re-run when toggle changes
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "checkAndRedirect") {
         redirectIfEnabled();
         hideSidebarIfEnabled();
+        hideSearchbarIfEnabled();
     }
 });
-
